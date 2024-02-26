@@ -1,175 +1,56 @@
 <template>
   <div class="personal-data-container">
-    <el-tabs class="tabs-container" v-model="activeName" @tab-click="tabClick">
-      <el-tab-pane label="基础资料" name="first">
-        <div class="tab-pane-container">
-          <el-form ref="basicData" class="basic-data-form" :model="basicData" label-width="94px">
-            <!-- 左边的 -->
-            <div class="left-form">
-              <el-form-item label="姓名" class="input-box label-border">
-                <el-input v-model="basicData.name"></el-input>
-                <el-button class="no-bg-btn" disabled>认证后不可修改</el-button>
-              </el-form-item>
-              <el-form-item label="身份证号" class="input-box label-border">
-                <el-input v-model="basicData.idCard"></el-input>
-                <el-button class="no-bg-btn" disabled>认证后不可修改</el-button>
-              </el-form-item>
 
-              <div class="id-card-container">
-                <div class="id-card-box">
-                  <div class="illustrate">
-                    身份证正面: <span>(认证后不可修改)</span>
-                  </div>
-                  <el-upload class="upload-com" action="" drag multiple>
-                    <div class="pic">
-                      <img class="img" src="../../assets/personalData/cardFront.png" alt="" />
-                    </div>
-                  </el-upload>
-                </div>
-                <div class="id-card-box">
-                  <div class="illustrate">
-                    身份证反面: <span>(认证后不可修改)</span>
-                  </div>
-                  <el-upload class="upload-com" action="" drag multiple>
-                    <div class="pic">
-                      <img class="img" src="../../assets/personalData/cardOpposite.png" alt="" />
-                    </div>
-                  </el-upload>
-                </div>
-              </div>
-            </div>
-            <!-- 右边的 -->
-            <!-- <div class="right-form">
-              <el-form-item label="用户头像" class="input-box">
-                <div class="avatar">
-                  <img style="width:100%;" :src="basicData.head_img ? VUE_APP_FILE_URL + basicData.head_img : ''" alt="" />
-                </div>
-
-                <el-upload class="upload-com" action="" :fileList="[]" :http-request="(files) => httpRequest1(files)"
-                  :before-upload="beforeAvatarUpload" :limit="1">
-                  <el-button class="no-bg-btn">更新头像</el-button>
-                </el-upload>
-              </el-form-item>
-              <el-form-item label="账号名称" class="input-box label-border">
-                <el-input :disabled="!userBool.userName" v-model="basicData.username"></el-input>
-                <el-button v-if="!userBool.userName" class="no-bg-btn" @click="userBool.userName = true">编辑</el-button>
-                <el-button v-if="userBool.userName" @click="setUser('username')" class="no-bg-btn">修改</el-button>
-              </el-form-item>
-              <el-form-item label="手机号码" class="input-box label-border">
-                <el-input v-model="basicData.mobile" :disabled="true"></el-input>
-                <el-button class="no-bg-btn" disabled>暂不可修改</el-button>
-              </el-form-item>
-              <el-form-item label="邮箱" class="input-box label-border">
-                <el-input :disabled="!userBool.email" type="email" v-model="basicData.email"></el-input>
-                <el-button v-if="!userBool.email" class="no-bg-btn" @click="userBool.email = true">编辑</el-button>
-                <el-button v-if="userBool.email" @click="setUser('email')" class="no-bg-btn">修改</el-button>
-              </el-form-item>
-              <el-form-item label="注册时间" class="input-box label-border">
-                <el-date-picker v-model="basicData.created_at" :disabled="true" type="date" prefix-icon="">
-                </el-date-picker>
-                <el-button class="no-bg-btn" style="position: relative; z-index: -1"></el-button>
-              </el-form-item>
-            </div> -->
-          </el-form>
-
-          <div class="edit-btn">
-            <el-button type="primary" @click="openMaterialsDialog">编辑</el-button>
+    <div class="step-list">
+      <template v-for="(step, index) of stepList">
+        <div class="step-item" :class="{active: step.isActive}" :key="step.num">
+          <div class="round">
+            <span class="num">{{ step.num }}</span>
+            <i class="el-icon-check icon"></i>
           </div>
-        </div>
-      </el-tab-pane>
-      <!-- <el-tab-pane label="收款地址" name="second">
-        <el-button type="primary" class="add-address-btn" @click="openDialog('添加收款地址')"><i
-            class="el-icon-plus"></i>添加收款地址</el-button>
-        <div class="tab-pane-container" style="border-radius: 10px; text-align: center">
-          <el-table height="100%" :data="receivingAddressList" style="width: 100%">
-            <el-table-column prop="channel" label="渠道类型"> </el-table-column>
-            <el-table-column prop="use_type" label="渠道用途">
-              <template slot-scope="scope">
-                <span v-if="scope.row.use_type == 1">收款</span>
-                <span v-if="scope.row.use_type == 2">提现</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="status" label="状态">
-              <template slot-scope="scope">
-                <span v-if="scope.row.status == 1">启用</span>
-                <span v-if="scope.row.status == 0">禁用</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="url" label="收款地址"></el-table-column>
-            <el-table-column prop="remark" label="备注"></el-table-column>
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <el-button type="primary" @click="openDialog('编辑收款地址', scope.row)" plain>编辑</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="pagination">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-              :current-page="paymentChannelObj.page" :page-sizes="[10, 20, 30, 40]" :page-size="paymentChannelObj.limit"
-              layout="total, sizes, prev, pager, next, jumper" :total="paymentChannelObj.total">
-            </el-pagination>
-          </div>
-        </div>
-      </el-tab-pane> -->
-      <el-tab-pane label="认证资料" name="third">
-        <div class="tab-pane-container">
-          <el-form ref="basicData" class="authentication-form" :disabled="basicData.is_auth == 1" :model="basicData"
-            label-width="94px">
-            <el-form-item prop="store_name" label="商家名称" class="input-box label-border">
-              <el-input v-model="authenticationData.store_name"></el-input>
-              <el-button class="no-bg-btn" disabled>认证后不可修改</el-button>
-            </el-form-item>
-            <el-form-item prop="name" label="姓名" class="input-box label-border">
-              <el-input v-model="authenticationData.name"></el-input>
-              <el-button class="no-bg-btn" disabled>认证后不可修改</el-button>
-            </el-form-item>
-            <el-form-item prop="card_no" label="身份证号" class="input-box label-border">
-              <el-input v-model="authenticationData.card_no"></el-input>
-              <el-button class="no-bg-btn" disabled>认证后不可修改</el-button>
-            </el-form-item>
 
-            <div class="id-card-container">
-              <div class="id-card-box">
-                <div class="illustrate">
-                  身份证正面: <span>(认证后不可修改)</span>
-                </div>
-                <el-upload class="upload-com" :fileList="[]" :http-request="(files) => httpRequest('cardFront', files)"
-                  :before-upload="beforeAvatarUpload" :limit="1">
-                  <div class="pic">
-                    <img class="img"
-                      :src="authenticationData.cardFront ? authenticationData.cardFront : require('../../assets/personalData/cardFront.png')"
-                      alt="" />
-                  </div>
-                </el-upload>
+          <span class="text">{{ step.text }}</span>
+        </div>
+        <div class="line" v-if="index !== stepList.length - 1"></div>
+      </template>
+    </div>
+
+    <el-form ref="basicData" label-position="left" :rules="rules" class="basic-data-form" :class="stepType" :model="basicData" label-width="94px">
+      <!-- 左边的 -->
+      <div class="in-review">
+        <div class="pic">
+          <img src="../../assets/funnel.png">
+        </div>
+        <p>认证信息正在审核中，请耐心等待！</p>
+      </div>
+      <div class="left-form">
+        <el-form-item label="商家名称:" class="input-box" prop="storeName">
+          <el-input v-model="basicData.storeName" :disabled="stepType !== 'apply'"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名:" class="input-box" prop="name">
+          <el-input v-model="basicData.name" :disabled="stepType !== 'apply'"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号:" class="input-box" prop="idCard">
+          <el-input v-model="basicData.idCard" :disabled="stepType !== 'apply'"></el-input>
+        </el-form-item>
+        <el-form-item label="证件照:" prop="idCardImg" class="id-card-img">
+          <el-upload class="upload-com" action="" drag multiple>
+              <div class="pic">
+                <img class="img" src="../../assets/personalData/cardFront.png" alt="" />
               </div>
-              <div class="id-card-box">
-                <div class="illustrate">
-                  身份证反面: <span>(认证后不可修改)</span>
-                </div>
-                <el-upload class="upload-com" :fileList="[]" :file-list="authenticationData.cardBack"
-                  :http-request="(files) => httpRequest('cardBack', files)" :before-upload="beforeAvatarUpload" :limit="1">
-                  <div class="pic">
-                    <img class="img"
-                      :src="authenticationData.cardBack ? authenticationData.cardBack : require('../../assets/personalData/cardOpposite.png')"
-                      alt="" />
-                  </div>
-                </el-upload>
+              <p>身份证正面</p>
+            </el-upload>
+
+            <el-upload class="upload-com" action="" drag multiple>
+              <div class="pic">
+                <img class="img" src="../../assets/personalData/cardOpposite.png" alt="" />
               </div>
-            </div>
-
-            <!-- <el-form-item label="认证时间" class="input-box label-border">
-              <el-date-picker v-model="authenticationData.authenticationTime" type="dates" format="yyyy/MM/dd HH:mm:ss"
-                placeholder="选择日期">
-              </el-date-picker>
-            </el-form-item> -->
-          </el-form>
-
-          <div class="edit-btn" style="" v-if="basicData.is_auth == 0">
-            <el-button type="primary" @click="authenticationFnc">申请认证</el-button>
-          </div>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+              <p>身份证正面</p>
+            </el-upload>
+        </el-form-item>
+        <el-button type="primary">申请认证</el-button>
+      </div>
+    </el-form>
 
     <!-- 编辑收款地址 -->
     <DirectiveDialog ref="directiveDialogRef" :title="dialogTit">
@@ -223,7 +104,55 @@ export default {
         page: 1,
         limit: 10,
         total: 10
-      }
+      },
+      rules:{
+        name: [
+          {
+            required: true,
+            message: '请输入名称',
+            trigger: 'blur'
+          },
+        ],
+        idCard: [
+          {
+            required: true,
+            message: '请输入身份证号',
+            trigger: 'blur'
+          },
+        ],
+        idCardImg: [
+          {
+            required: true,
+            message: '请输入身份证号',
+            trigger: 'blur'
+          },
+        ],
+        storeName: [
+          {
+            required: true,
+            message: '请输入商家名称',
+            trigger: 'blur'
+          },
+        ]
+      },
+      stepList: [
+        {
+          num: 1,
+          text: "申请认证",
+          isActive: true
+        },
+        {
+          num: 2,
+          text: "平台审核",
+          isActive: false
+        },
+        {
+          num: 3,
+          text: "成为商家",
+          isActive: false
+        }
+      ],
+      stepType: "apply", // apply: 申请认证,  review: 审核中, result: 结果
     };
   },
   computed: {
@@ -392,28 +321,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
-::v-deep .el-input__inner{
-  border-top-right-radius: 6px !important;
-  border-bottom-right-radius: 6px !important;
-}
-
-.pagination {
-  padding-bottom: 47px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-}
-
-::v-deep .el-pager {
-  .active {
-    background: linear-gradient(0deg, #5B80EE 0%, #3E63F4 100%);
-    font-size: 14px;
-    color: white;
-    border-radius: 5px;
-  }
-}
 
 .personal-data-container {
   flex-grow: 1;
@@ -422,217 +329,156 @@ export default {
   display: flex;
   flex-direction: column;
 
-  .tabs-container {
-    height: 100%;
-    flex-grow: 1;
-
+  .step-list {
+    margin: 20px 0 48px 104px;
+    max-width: 662px;
+    width: 100%;
     display: flex;
+    align-items: center;
+
+    .step-item {
+      border-radius: 50%;
+      border: 6px solid #DEDFF7;
+      width: 50px;
+      height: 50px;
+      position: relative;
+
+      &.active {
+        .round {
+          background-image: linear-gradient( 180deg, #5666FF 0%, #7A5AFF 100%);
+
+          .num {
+            display: none;
+          }
+
+          .icon {
+            display: block;
+          }
+        }
+      }
+
+      .round {
+        border-radius: 50%;
+        border: 6px solid #fff;
+        width: 100%;
+        height: 100%;
+        background-color: #DEDFF7;
+
+        @include df(center, center);
+
+        .num {
+          color: #9492AC;
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        .icon {
+          display: none;
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+
+      .text {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        color: #1D1D1D;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+
+    .line {
+      margin-left: 52px;
+      margin-right: 52px;
+      height: 4px;
+      flex-grow: 1;
+      background-color: #DDDEEC;
+    }
+  }
+
+  .basic-data-form {
+    display: flex;
+    flex-grow: 1;
     flex-direction: column;
+    align-items: flex-start;
 
-    ::v-deep.el-tabs__header {
-      margin-bottom: 2px;
-      border-radius: 10px 10px 0 0;
-      background-color: #fff;
+    border-radius: 10px;
+    padding: 65px 92px;
+    background-color: #fff;
 
-      .el-tabs__nav-wrap {
-        margin-bottom: 0;
-        overflow: visible;
+    &.review {
+      .left-form {
+        padding-left: 42px;
 
-        &::after {
-          content: none;
-        }
-      }
-
-      .el-tabs__nav-scroll {
-        overflow: visible;
-      }
-
-      .el-tabs__nav {
-        padding: 22px 0 22px;
-        float: none;
-
-        .el-tabs__active-bar {
-          bottom: -2px;
-        }
-
-        .el-tabs__item {
-          padding-right: 0;
-          padding-left: 32px;
-          font-size: 18px;
-          color: #333333;
-          line-height: normal;
-          height: auto;
-          font-weight: 800;
-
-          &.is-active {
-            color: $subMenuHover;
+        .input-box {
+          ::v-deep .el-input__inner {
+            border: none;
           }
         }
       }
     }
 
-    ::v-deep.el-tabs__content {
-      border-radius: 0 0 10px 10px;
-      flex-grow: 1;
+    .in-review {
+      margin-bottom: 40px;
+      border-radius: 20px;
+      padding: 18px 28px;
+      background-color: #F2F5FA;
 
       display: flex;
+      align-items: center;
+
+      .pic {
+        width: 38px;
+      }
+
+      p {
+        margin-left: 14px;
+        color: #DD8813;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+
+    .left-form {
+      width: 50%;
+      display: flex;
       flex-direction: column;
-
-      .el-tab-pane {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        flex-grow: 1;
-        align-items: flex-start;
-
-        .tab-pane-container {
-          overflow-y: auto;
-          width: 100%;
-          padding: 38px 32px;
-          background-color: #fff;
-          display: flex;
-          flex-direction: column;
-          flex-grow: 1;
-        }
-      }
-
-      .add-address-btn {
-        margin-top: 18px;
-        margin-bottom: 8px;
-
-        i {
-          margin-right: 10px;
-          border: 1px solid #fff;
-          padding: 2px;
-          font-size: 12px;
-        }
-      }
-
-      .basic-data-form {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        flex-grow: 1;
-
-        .left-form,
-        .right-form {
-          padding-right: 176px;
-          width: 50%;
-          display: flex;
-          flex-direction: column;
-        }
-      }
-
-      .authentication-form {
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
-        width: 100%;
-        max-width: 40%;
-      }
-
-      .edit-btn {
-        display: flex;
-        justify-content: center;
-      }
-
-      .el-table {
-        .el-tag {
-          padding: 0;
-          background-color: transparent;
-          border: none;
-        }
-      }
+      align-items: center;
 
       .input-box {
-        margin-bottom: 25px;
-        display: flex;
+        width: 100%;
 
-        &:last-child {
-          margin-bottom: 0;
+        ::v-deep .el-form-item__label {
+          height: 48px;
+          line-height: 48px;
         }
 
-        &.label-border {
-          .el-form-item__label {
-            border: 1px solid #c0c4cc;
-            border-right: none;
-            border-radius: 6px 0 0 6px;
-            padding: 14px 0 14px 32px;
-            min-width: 130px;
-          }
-        }
-
-        .avatar {
-          margin-left: 32px;
-          border-radius: 50%;
-          height: 50px;
-          width: 50px;
-          overflow: hidden;
-          background-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .el-form-item__label {
-          padding-left: 20px;
-          line-height: normal;
-          text-align: left;
-          display: flex;
-          align-items: center;
-          padding-right: 0;
-        }
-
-        .el-form-item__content {
-          margin-left: 0 !important;
-          display: flex;
-          flex-grow: 1;
-
-          .el-input__inner {
-            border: 1px solid #c0c4cc;
-            padding-left: 32px;
-            border-radius: 0;
-            height: 100%;
-          }
-
-          .el-date-editor.el-input {
-            width: 100%;
-          }
-
-          .no-bg-btn {
-            margin-left: 32px;
-            padding: 0;
-            background-color: transparent;
-            border: none;
-            color: #1890ff;
-            width: 100px;
-            text-align: left;
-
-            &[disabled] {
-              color: #c0c4cc;
-            }
-          }
+        ::v-deep .el-input__inner {
+          height: 48px;
+          line-height: 48px;
+          background-color: transparent;
         }
       }
 
-      .id-card-container {
-        margin-top: 13px;
-        margin-bottom: 48px;
-        display: flex;
-        justify-content: space-between;
+      .id-card-img {
+        width: 100%;
 
-        .id-card-box {
-          width: 33.33%;
-
-          .illustrate {
-            margin-bottom: 22px;
-            color: #333333;
-
-            span {
-              color: #858585;
-            }
-          }
+        ::v-deep .el-form-item__content {
+          display: flex;
 
           .upload-com {
+            margin-right: 45px;
+
             .el-upload {
               width: 100%;
+
+              .el-upload-dragger {
+            background-color: transparent;
+              }
             }
 
             .el-upload-dragger {
@@ -642,11 +488,21 @@ export default {
             }
 
             .pic {
+              border-radius: 5px;
+              border: 1px dashed #aaa;
               width: 100%;
+              overflow: hidden;
+            }
+
+            p {
+              margin-top: 8px;
+              color: #B8BDC6;
+              font-size: 14px;
             }
           }
         }
       }
     }
   }
-}</style>
+}
+</style>

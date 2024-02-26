@@ -34,3 +34,10 @@ $navbarH: 100px;
   subMenuHover: $subMenuHover;
   sideBarWidth: $sideBarWidth;
 }
+
+
+@mixin df($alignItems, $justifyContent) {
+  display: flex;
+  align-items: $alignItems;
+  justify-content: $justifyContent;
+}
