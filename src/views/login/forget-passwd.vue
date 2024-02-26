@@ -203,6 +203,18 @@
   }
   </script>
   
+  <style lang="scss" scoped>
+::v-deep  .el-input__inner{
+  border-left:none;
+}
+::v-deep .code-inp-box{
+  .el-input__inner{
+    border-left: 1px solid #DCDFE6;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+  }
+}
+</style>
   <style lang="scss">
   .login-container {
       display: flex;
