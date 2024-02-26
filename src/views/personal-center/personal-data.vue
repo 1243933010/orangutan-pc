@@ -3,15 +3,15 @@
 
     <div class="step-list">
       <template v-for="(step, index) of stepList">
-        <div class="step-item" :class="{active: step.isActive}" :key="step.num">
+        <div :key="step.num" class="step-item" :class="{active: step.isActive}">
           <div class="round">
             <span class="num">{{ step.num }}</span>
-            <i class="el-icon-check icon"></i>
+            <i class="el-icon-check icon" />
           </div>
 
           <span class="text">{{ step.text }}</span>
         </div>
-        <div class="line" v-if="index !== stepList.length - 1"></div>
+        <div v-if="index !== stepList.length - 1" class="line" />
       </template>
     </div>
 
@@ -25,28 +25,28 @@
       </div>
       <div class="left-form">
         <el-form-item label="商家名称:" class="input-box" prop="storeName">
-          <el-input v-model="basicData.storeName" :disabled="stepType !== 'apply'"></el-input>
+          <el-input v-model="basicData.storeName" :disabled="stepType !== 'apply'" />
         </el-form-item>
         <el-form-item label="姓名:" class="input-box" prop="name">
-          <el-input v-model="basicData.name" :disabled="stepType !== 'apply'"></el-input>
+          <el-input v-model="basicData.name" :disabled="stepType !== 'apply'" />
         </el-form-item>
         <el-form-item label="身份证号:" class="input-box" prop="idCard">
-          <el-input v-model="basicData.idCard" :disabled="stepType !== 'apply'"></el-input>
+          <el-input v-model="basicData.idCard" :disabled="stepType !== 'apply'" />
         </el-form-item>
         <el-form-item label="证件照:" prop="idCardImg" class="id-card-img">
           <el-upload class="upload-com" action="" drag multiple>
-              <div class="pic">
-                <img class="img" src="../../assets/personalData/cardFront.png" alt="" />
-              </div>
-              <p>身份证正面</p>
-            </el-upload>
+            <div class="pic">
+              <img class="img" src="../../assets/personalData/cardFront.png" alt="">
+            </div>
+            <p>身份证正面</p>
+          </el-upload>
 
-            <el-upload class="upload-com" action="" drag multiple>
-              <div class="pic">
-                <img class="img" src="../../assets/personalData/cardOpposite.png" alt="" />
-              </div>
-              <p>身份证正面</p>
-            </el-upload>
+          <el-upload class="upload-com" action="" drag multiple>
+            <div class="pic">
+              <img class="img" src="../../assets/personalData/cardOpposite.png" alt="">
+            </div>
+            <p>身份证正面</p>
+          </el-upload>
         </el-form-item>
         <el-button type="primary">申请认证</el-button>
       </div>
@@ -54,27 +54,30 @@
 
     <!-- 编辑收款地址 -->
     <DirectiveDialog ref="directiveDialogRef" :title="dialogTit">
-      <AddressForm ref="addressFormRef" :closeDialog="closeDialog" :getDialogData="getDialogData"
-        :addressInfo="checkedAddress"></AddressForm>
+      <AddressForm
+        ref="addressFormRef"
+        :close-dialog="closeDialog"
+        :get-dialog-data="getDialogData"
+        :address-info="checkedAddress"
+      />
     </DirectiveDialog>
 
     <!-- 编辑资料 -->
     <DirectiveDialog ref="materialsDialogRef" title="编辑资料">
-      <MaterialsForm :closeDialog="closeMaterialsDialog" :getDialogData="getMaterialsDialogData" :formInfo="basicData">
-      </MaterialsForm>
+      <MaterialsForm :close-dialog="closeMaterialsDialog" :get-dialog-data="getMaterialsDialogData" :form-info="basicData" />
     </DirectiveDialog>
   </div>
 </template>
 
 <script>
-import Navbar from "@/layout/components/Navbar";
-import AddressForm from "@/views/personal-center/components/addressForm";
-import DirectiveDialog from "@/components/DirectiveDialog/index";
-import MaterialsForm from "@/views/personal-center/components/materialsForm";
+import Navbar from '@/layout/components/Navbar'
+import AddressForm from '@/views/personal-center/components/addressForm'
+import DirectiveDialog from '@/components/DirectiveDialog/index'
+import MaterialsForm from '@/views/personal-center/components/materialsForm'
 import { user_info, authentication, uploadImg, payment_channel, payment_channel_submit, payment_channel_edit, user_info_edit } from '@/api/project'
 import { convertTimestampToDateString } from '@/utils/time'
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     Navbar,
     AddressForm,
@@ -83,7 +86,7 @@ export default {
   },
   data() {
     return {
-      activeName: "first",
+      activeName: 'first',
       userBool: {
         headIcon: false,
         userName: false,
@@ -91,119 +94,124 @@ export default {
       },
       basicData: {},
       authenticationData: {
-        store_name: "",
-        name: "",
-        card_no: "",
+        store_name: '',
+        name: '',
+        card_no: '',
         cardFront: '',
         cardBack: ''
       },
       receivingAddressList: [],
-      dialogTit: "编辑收款地址",
+      dialogTit: '编辑收款地址',
       checkedAddress: undefined,
       paymentChannelObj: {
         page: 1,
         limit: 10,
         total: 10
       },
-      rules:{
+      rules: {
         name: [
           {
             required: true,
             message: '请输入名称',
             trigger: 'blur'
-          },
+          }
         ],
         idCard: [
           {
             required: true,
             message: '请输入身份证号',
             trigger: 'blur'
-          },
+          }
         ],
         idCardImg: [
           {
             required: true,
             message: '请输入身份证号',
             trigger: 'blur'
-          },
+          }
         ],
         storeName: [
           {
             required: true,
             message: '请输入商家名称',
             trigger: 'blur'
-          },
+          }
         ]
       },
       stepList: [
         {
           num: 1,
-          text: "申请认证",
+          text: '申请认证',
           isActive: true
         },
         {
           num: 2,
-          text: "平台审核",
+          text: '平台审核',
           isActive: false
         },
         {
           num: 3,
-          text: "成为商家",
+          text: '成为商家',
           isActive: false
         }
       ],
-      stepType: "apply", // apply: 申请认证,  review: 审核中, result: 结果
-    };
+      stepType: 'apply' // apply: 申请认证,  review: 审核中, result: 结果
+    }
   },
   computed: {
     VUE_APP_FILE_URL() {
       return process.env.VUE_APP_FILE_URL
     }
   },
+  mounted() {
+    // this.receivingAddressList.sort((a, b) => a.sort - b.sort);
+    // console.log(this.receivingAddressList);
+    this.getUserInfo()
+  },
   methods: {
     async setUser(type) {
       // console.log(this.basicData,this.basicData[type],type)
-      let formData = {
+      const formData = {
         field: type,
         value: this.basicData[type]
-      };
-      let res = await user_info_edit(formData);
+      }
+      const res = await user_info_edit(formData)
       if (res.code == 200) {
-        this.$message.success(res.msg);
+        this.$message.success(res.msg)
         this.userBool = {
           headIcon: false,
           userName: false,
           email: false
         }
-        this.getUserInfo();
+        this.getUserInfo()
         return
       }
       this.$message.error(res.msg)
     },
     handleSizeChange(val) {
-      this.paymentChannelObj.limit = val;
-      this.paymentChannel(true);
+      this.paymentChannelObj.limit = val
+      this.paymentChannel(true)
     },
     handleCurrentChange(val) {
-      this.paymentChannelObj.page = val;
-      this.paymentChannel();
+      this.paymentChannelObj.page = val
+      this.paymentChannel()
     },
     async paymentChannel(bool = false) {
       if (bool) {
-        this.paymentChannelObj.page = 1;
+        this.paymentChannelObj.page = 1
       }
-      let res = await payment_channel(this.paymentChannelObj);
+      const res = await payment_channel(this.paymentChannelObj)
       if (res.code == 200) {
-        this.receivingAddressList = res.data.data;
-        this.paymentChannelObj.total = res.data.total;
+        this.receivingAddressList = res.data.data
+        this.paymentChannelObj.total = res.data.total
       }
     },
-    async httpRequest(type, files,) {
+    async httpRequest(type, files) {
       console.log(res, process.env.VUE_APP_FILE_URL)
-      const formData = new FormData();
-      formData.append("file", files.file);  //文件名
+      const formData = new FormData()
+      formData.append('file', files.file) // 文件名
 
-      let res = await uploadImg(formData)
+      const res = await uploadImg(formData)
 
       if (res.code == 200) {
         this.authenticationData[type] = process.env.VUE_APP_FILE_URL + res.data
@@ -212,11 +220,10 @@ export default {
       this.$message.error(res.msg)
     },
     async httpRequest1(files) {
-
-      const formData = new FormData();
+      const formData = new FormData()
       console.log('---')
-      formData.append("file", files.file);  //文件名
-      let res = await uploadImg(formData)
+      formData.append('file', files.file) // 文件名
+      const res = await uploadImg(formData)
       console.log(res, process.env.VUE_APP_FILE_URL)
       if (res.code == 200) {
         this.basicData.head_img = res.data
@@ -226,38 +233,38 @@ export default {
       this.$message.error(res.msg)
     },
     beforeAvatarUpload(file) {
-      const isIMG = file.type.includes('image');
+      const isIMG = file.type.includes('image')
 
       if (!isIMG) {
-        this.$message.error('上传头像只能是图片!');
+        this.$message.error('上传头像只能是图片!')
       }
-      return isIMG;
+      return isIMG
     },
     async authenticationFnc() {
-      let formData = this.authenticationData;
-      formData.front = formData.cardFront;
-      formData.back = formData.cardBack;
-      let { bool, msg } = this.validateData([formData.store_name, formData.name, formData.card_no, formData.front, formData.back],
+      const formData = this.authenticationData
+      formData.front = formData.cardFront
+      formData.back = formData.cardBack
+      const { bool, msg } = this.validateData([formData.store_name, formData.name, formData.card_no, formData.front, formData.back],
         ['商户名称', '名称', '身份证号', '身份证正面', '身份证反面'])
 
       if (!bool) {
         this.$message.error(msg)
         return
       }
-      let res = await authentication(formData);
+      const res = await authentication(formData)
       if (res.code == 200) {
         this.$message.success(res.msg)
-        this.getUserInfo();
+        this.getUserInfo()
         return
       }
       this.$message.error(res.msg)
     },
     async getUserInfo() {
-      let res = await user_info();
+      const res = await user_info()
       // console.log(res,'---')
       if (res.code == 200) {
         res.data.created_at = convertTimestampToDateString(res.data.created_at)
-        this.basicData = res.data;
+        this.basicData = res.data
       }
     },
     tabClick(e) {
@@ -266,57 +273,51 @@ export default {
         this.paymentChannel()
       }
       if (+e.index == 2) {
-        this.getUserInfo();
+        this.getUserInfo()
       }
     },
     openDialog(dialogTit, data = undefined) {
-      this.dialogTit = dialogTit;
-      this.checkedAddress = data;
-      this.$refs.directiveDialogRef.openDialog(data);
+      this.dialogTit = dialogTit
+      this.checkedAddress = data
+      this.$refs.directiveDialogRef.openDialog(data)
       this.$nextTick(() => {
-        this.$refs.addressFormRef?.openDialog(data);
+        this.$refs.addressFormRef?.openDialog(data)
       })
       // console.log(data,this.$refs.directiveDialogRef);
     },
     closeDialog() {
-      this.$refs.directiveDialogRef.close();
+      this.$refs.directiveDialogRef.close()
     },
     async getDialogData(data) {
       // console.log(data);
-      let fnc = payment_channel_submit;
+      let fnc = payment_channel_submit
       if (data.payment_id) {
         fnc = payment_channel_edit
       }
 
-      let res = await fnc(data);
+      const res = await fnc(data)
 
       // console.log(res)
       if (res.code == 200) {
         this.$message.success(res.msg)
-        this.paymentChannel(true);
+        this.paymentChannel(true)
         return
       }
       this.$message.error(res.msg)
       // 保存后的数据 data
     },
     closeMaterialsDialog() {
-      this.$refs.materialsDialogRef.close();
+      this.$refs.materialsDialogRef.close()
     },
     getMaterialsDialogData(data) {
-      console.log(data);
+      console.log(data)
       // 保存后的数据 data
     },
     openMaterialsDialog() {
-      this.$refs.materialsDialogRef.openDialog();
+      this.$refs.materialsDialogRef.openDialog()
     }
-  },
-  mounted() {
-    // this.receivingAddressList.sort((a, b) => a.sort - b.sort);
-    // console.log(this.receivingAddressList);
-    this.getUserInfo();
-
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped>
