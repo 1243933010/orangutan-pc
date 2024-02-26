@@ -174,10 +174,27 @@ const actions = {
               component: () => import('@/views/personal-center/personal-data'),
               name: '成为卡商',
               meta: { title: '成为卡商', icon: 'el-icon-postcard', affix: true }
-            }
+            },
+           
 
           ]
-        },]
+        },
+        {
+          path: '/merchantSettings',
+          component: Layout,
+          children: [
+            {
+              path: 'merchantSettings',
+              component: () => import('@/views/merchantSettings/index'),
+              name: '商家设置',
+              meta: { title: '商家设置', icon: 'el-icon-postcard', affix: true }
+            }
+           
+
+          ]
+        },
+        
+      ]
 
         let identity2 = [{
           path: '/collectionSettings',

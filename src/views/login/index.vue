@@ -226,7 +226,13 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+::v-deep  .el-input__inner{
+  border-left:none;
+}
+</style>
 <style lang="scss">
+
 .login-container {
     display: flex;
 
