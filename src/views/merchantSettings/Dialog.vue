@@ -49,7 +49,7 @@
 
 <script>
 import DirectiveDialog from "@/components/DirectiveDialog/index";
-import {   uploadImg} from '@/api/project'
+import { uploadImg } from '@/api/project'
 
 export default {
     components: { DirectiveDialog },
@@ -199,20 +199,23 @@ export default {
                     align-items: center;
                 }
             }
-            .form-item-right1{
+
+            .form-item-right1 {
                 padding-left: 10px;
-                .icon-file{
+
+                .icon-file {
                     width: 50px;
                     border-radius: 50%;
                 }
             }
+
             .form-item-right {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: column;
                 border-top-right-radius: 5px;
                 border-bottom-right-radius: 5px;
-                
+
 
                 .form-item-right-input {
                     height: 42px;
