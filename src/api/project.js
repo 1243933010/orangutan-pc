@@ -437,3 +437,44 @@ export function order_options(params) {
     params
   })
 }
+
+
+//商户认证状态
+export function dealers_verify_status(params) {
+  return request({
+    url: `/api/dealers/dealers_verify_status`,
+    method: 'get',
+    params
+  })
+}
+
+
+//认证商家
+export function dealers_verify(data) {
+  return request({
+    url: `/api/dealers/dealers_verify`,
+    method: 'post',
+    data
+  })
+}
+
+
+
+//商户相关信息
+export function dealers_info(params) {
+  return request({
+    url: `/api/dealers/dealers_info`,
+    method: 'get',
+    params
+  })
+}
+
+
+//修改商户信息
+export function update_info(data) {
+  return request({
+    url: `/api/dealers/update_info`,
+    method: 'post',
+    data
+  })
+}

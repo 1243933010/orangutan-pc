@@ -75,7 +75,9 @@ import Navbar from "@/layout/components/Navbar";
 import AddressForm from "@/views/personal-center/components/addressForm";
 import DirectiveDialog from "@/components/DirectiveDialog/index";
 import MaterialsForm from "@/views/personal-center/components/materialsForm";
-import { user_info, authentication, uploadImg, payment_channel, payment_channel_submit, payment_channel_edit, user_info_edit } from '@/api/project'
+import { user_info, authentication, 
+    uploadImg, payment_channel, payment_channel_submit,
+     payment_channel_edit, user_info_edit, } from '@/api/project'
 import { convertTimestampToDateString } from '@/utils/time'
 export default {
     name: "Home",

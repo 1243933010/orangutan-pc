@@ -1,6 +1,6 @@
 <template>
   <div class="dialog-container">
-    <el-form class="address-form" :model="addressInfo" label-width="94px">
+    <el-form class="address-form" :model="addressInfo" label-width="124px">
       <el-form-item class="input-box" label="状态">
         <el-radio-group v-model="addressInfo.status">
           <el-radio :label="1">启用</el-radio>
@@ -8,13 +8,22 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item class="input-box label-border" label="收款地址">
-        <el-input v-model="addressInfo.url" placeholder="请输入钱包地址"></el-input>
+        <el-input v-model="addressInfo.account" placeholder="请输入钱包地址"></el-input>
       </el-form-item>
       <el-form-item class="input-box label-border" label="渠道类型">
         <el-select v-model="addressInfo.channel" placeholder="渠道类型">
           <el-option v-for="(item,index) in channelTypeOp" :key="item.key" :label="item.label" :value="item.value" @change="changeSelect">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item class="input-box label-border" label="汇率">
+        <el-input v-model="addressInfo.rate" placeholder="请输入汇率"></el-input>
+      </el-form-item>
+      <el-form-item class="input-box label-border" label="最小收款金额">
+        <el-input v-model="addressInfo.min_money" placeholder="请输入最小收款金额"></el-input>
+      </el-form-item>
+      <el-form-item class="input-box label-border" label="最大收款金额">
+        <el-input v-model="addressInfo.max_money" placeholder="请输入最大收款金额"></el-input>
       </el-form-item>
       <!-- <el-form-item class="input-box label-border" label="渠道用途">
         <el-select v-model="addressInfo.use_type" placeholder="渠道用途">
@@ -51,11 +60,14 @@ export default {
     return {
       addressInfo: {
         status: 1,
-        url: '',
+        account: '',
         channel: '',
         // use_type: '',
         sort: '',
-        remark: ''
+        remark: '',
+        rate:'',
+        min_money:'',
+        max_money:''
       },
       channelTypeOp: [
         {
@@ -92,17 +104,25 @@ export default {
       } else {
         this.addressInfo = {
           status: 1,
-          url: '',
+          account: '',
           channel: '',
           // use_type: '',
           sort: '',
-          remark: ''
+          remark: '',
+          rate:'',
+        min_money:'',
+        max_money:''
         }
       }
     },
     async saveHandle() {
-      let { bool, msg } = this.validateData([this.addressInfo.status, this.addressInfo.url, this.addressInfo.channel],
-        ['状态', '收款地址', '渠道类型'])
+      let { bool, msg } = this.validateData([this.addressInfo.status, 
+      this.addressInfo.url, 
+      this.addressInfo.channel,
+       this.addressInfo.rate,
+        this.addressInfo.min_money, 
+        this.addressInfo.max_money],
+        ['状态', '收款地址', '渠道类型','汇率','最小值','最大值'])
 
       if (!bool) {
         this.$message.error(msg)

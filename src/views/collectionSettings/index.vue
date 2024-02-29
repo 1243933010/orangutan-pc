@@ -41,7 +41,7 @@
           </div>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="收款地址" name="second">
+      <el-tab-pane label="通道地址" name="second">
         <el-button type="primary" class="add-address-btn" @click="openDialog('添加收款地址')"><i
             class="el-icon-plus"></i>添加收款地址</el-button>
         <div class="tab-pane-container" style="border-radius: 10px; text-align: center">
@@ -66,7 +66,14 @@
                 <span v-if="scope.row.status == 0">禁用</span>
               </template>
             </el-table-column>
-            <el-table-column prop="url" label="收款地址"></el-table-column>
+            <el-table-column prop="account" label="收款地址"></el-table-column>
+            <el-table-column prop="rate" label="汇率"></el-table-column>
+            <el-table-column prop="rate" label="收款金额区间">
+              <template slot-scope="scope">
+                <span >{{ scope.row.min_money }}-{{ scope.row.max_money }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="rate" label="汇率"></el-table-column>
             <el-table-column prop="remark" label="备注"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
