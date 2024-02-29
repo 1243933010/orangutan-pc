@@ -4,7 +4,7 @@
       <img src="../../assets/collection_icon.png" alt="">
       <span>收款设置</span>
     </div> -->
-    <el-tabs class="tabs-container" v-model="activeName" @tab-click="tabClick">
+    <el-tabs v-model="activeName" class="tabs-container" @tab-click="tabClick">
       <el-tab-pane label="收款设置" name="first">
         <el-form class="address-form" :model="addressInfo" label-width="150px">
           <el-form-item class="input-box label-border" label="收款状态">
@@ -20,9 +20,9 @@
           </el-form-item>
           <el-form-item class="input-box label-border" label="收款区间">
             <!-- type="textarea" -->
-            <el-input style="width: 45%;" type="number" v-model="addressInfo.min_money" placeholder="最小值" />
+            <el-input v-model="addressInfo.min_money" style="width: 45%;" type="number" placeholder="最小值" />
             <span style="width: 10%;text-align: center;">---</span>
-            <el-input style="width: 45%;" type="number" v-model="addressInfo.max_money" placeholder="最大值" />
+            <el-input v-model="addressInfo.max_money" style="width: 45%;" type="number" placeholder="最大值" />
             <div class="form-label"><span>只收在这个范围的金额</span></div>
 
           </el-form-item>
@@ -43,7 +43,8 @@
       </el-tab-pane>
       <el-tab-pane label="通道地址" name="second">
         <el-button type="primary" class="add-address-btn" @click="openDialog('添加收款地址')"><i
-            class="el-icon-plus"></i>添加收款地址</el-button>
+          class="el-icon-plus"
+        />添加收款地址</el-button>
         <div class="tab-pane-container" style="border-radius: 10px; text-align: center">
           <el-table height="100%" :data="receivingAddressList" style="width: 100%">
             <el-table-column prop="channel" label="渠道类型">
@@ -66,26 +67,31 @@
                 <span v-if="scope.row.status == 0">禁用</span>
               </template>
             </el-table-column>
-            <el-table-column prop="account" label="收款地址"></el-table-column>
-            <el-table-column prop="rate" label="汇率"></el-table-column>
+            <el-table-column prop="account" label="收款地址" />
+            <el-table-column prop="rate" label="汇率" />
             <el-table-column prop="rate" label="收款金额区间">
               <template slot-scope="scope">
-                <span >{{ scope.row.min_money }}-{{ scope.row.max_money }}</span>
+                <span>{{ scope.row.min_money }}-{{ scope.row.max_money }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="rate" label="汇率"></el-table-column>
-            <el-table-column prop="remark" label="备注"></el-table-column>
+            <el-table-column prop="rate" label="汇率" />
+            <el-table-column prop="remark" label="备注" />
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="primary" @click="openDialog('编辑收款地址', scope.row)" plain>编辑</el-button>
+                <el-button type="primary" plain @click="openDialog('编辑收款地址', scope.row)">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
           <div class="pagination">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-              :current-page="paymentChannelObj.page" :page-sizes="[10, 20, 30, 40]" :page-size="paymentChannelObj.limit"
-              layout="total, sizes, prev, pager, next, jumper" :total="paymentChannelObj.total">
-            </el-pagination>
+            <el-pagination
+              :current-page="paymentChannelObj.page"
+              :page-sizes="[10, 20, 30, 40]"
+              :page-size="paymentChannelObj.limit"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="paymentChannelObj.total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
       </el-tab-pane>
@@ -93,19 +99,24 @@
 
     <!-- 编辑收款地址 -->
     <DirectiveDialog ref="directiveDialogRef1" :title="dialogTit">
-      <AddressForm ref="addressFormRef" :closeDialog="closeDialog" :getDialogData="getDialogData"
-        :addressInfo="checkedAddress"></AddressForm>
+      <AddressForm
+        ref="addressFormRef"
+        :close-dialog="closeDialog"
+        :get-dialog-data="getDialogData"
+        :address-info="checkedAddress"
+      />
     </DirectiveDialog>
   </div>
 </template>
 
 <script>
 // import clooectionMixins from '../clooectionMixins'
-import { payment_config, payment_set, payment_channel,payment_channel_submit,payment_channel_edit } from '@/api/project'
-import AddressForm from "./components/addressForm";
-import DirectiveDialog from "@/components/DirectiveDialog/index";
+import { payment_config, payment_set, payment_channel, payment_channel_submit, payment_channel_edit } from '@/api/project'
+import AddressForm from './components/addressForm'
+import DirectiveDialog from '@/components/DirectiveDialog/index'
 
 export default {
+  components: { AddressForm, DirectiveDialog },
   props: {
     closeDialog: {
       type: Function,
@@ -114,7 +125,7 @@ export default {
     getDialogData: {
       type: Function,
       default: () => { }
-    },
+    }
     // addressInfo: {
     //   type: Object,
     //   default: () => {
@@ -124,7 +135,6 @@ export default {
     //   }
     // }
   },
-  components: { AddressForm, DirectiveDialog },
   data() {
     return {
       channelUsageOp: [
@@ -135,7 +145,7 @@ export default {
         {
           value: 1,
           label: '开启'
-        },
+        }
       ],
       addressInfo: {
         rate: '',
@@ -147,14 +157,14 @@ export default {
         payment_status: ''
       },
       receivingAddressList: [],
-      activeName: "first",
+      activeName: 'first',
       paymentChannelObj: {
         page: 1,
         limit: 10,
         total: 10
       },
       checkedAddress: undefined,
-      dialogTit: "编辑收款地址",
+      dialogTit: '编辑收款地址'
     }
   },
   mounted() {
@@ -168,48 +178,47 @@ export default {
         this.paymentChannel()
       }
       if (+e.index == 2) {
-        this.getUserInfo();
+        this.getUserInfo()
       }
     },
     handleSizeChange(val) {
-      this.paymentChannelObj.limit = val;
-      this.paymentChannel(true);
+      this.paymentChannelObj.limit = val
+      this.paymentChannel(true)
     },
     handleCurrentChange(val) {
-      this.paymentChannelObj.page = val;
-      this.paymentChannel();
+      this.paymentChannelObj.page = val
+      this.paymentChannel()
     },
     async paymentChannel(bool = false) {
       if (bool) {
-        this.paymentChannelObj.page = 1;
+        this.paymentChannelObj.page = 1
       }
-      let res = await payment_channel(this.paymentChannelObj);
+      const res = await payment_channel(this.paymentChannelObj)
       if (res.code == 200) {
-        this.receivingAddressList = res.data.data;
-        this.paymentChannelObj.total = res.data.total;
+        this.receivingAddressList = res.data.data
+        this.paymentChannelObj.total = res.data.total
       }
     },
     openDialog(dialogTit, data = undefined) {
-      this.dialogTit = dialogTit;
-      this.checkedAddress = data;
-      this.$refs.directiveDialogRef1.openDialog(data);
+      this.dialogTit = dialogTit
+      this.checkedAddress = data
+      this.$refs.directiveDialogRef1.openDialog(data)
       // this.$nextTick(() => {
       //   this.$refs.addressFormRef?.openDialog(data);
       // })
-
     },
     changeInput(e) {
       console.log(e)
     },
     async paymentConfig() {
-      let res = await payment_config();
+      const res = await payment_config()
       console.log(res, '**')
       if (res.code == 200) {
-        this.addressInfo = res.data;
+        this.addressInfo = res.data
       }
     },
     async paymentSet() {
-      let formData = this.addressInfo;
+      const formData = this.addressInfo
 
       if (formData.min_money >= this.addressInfo.max_money) {
         this.$message.error('最大最小值格式错误')
@@ -217,14 +226,14 @@ export default {
       }
       //  formData.min_money = formData.num.split('-')[0].trim();
       //  formData.max_money = formData.num.split('-')[1].trim();
-      let { bool, msg } = this.validateData([formData.payment_status, formData.rate, formData.max_money, formData.min_money, formData.pay_time],
+      const { bool, msg } = this.validateData([formData.payment_status, formData.rate, formData.max_money, formData.min_money, formData.pay_time],
         ['收款状态', '汇率', '最大金额', '最小金额', '支付市场'])
 
       if (!bool) {
         this.$message.error(msg)
         return
       }
-      let res = await payment_set(formData);
+      const res = await payment_set(formData)
       console.log(res)
       if (res.code == 200) {
         this.$message.success(res.msg)
@@ -234,17 +243,17 @@ export default {
     },
     async getDialogData(data) {
       // console.log(data);
-      let fnc = payment_channel_submit;
+      let fnc = payment_channel_submit
       if (data.payment_id) {
         fnc = payment_channel_edit
       }
 
-      let res = await fnc(data);
+      const res = await fnc(data)
 
       // console.log(res)
       if (res.code == 200) {
         this.$message.success(res.msg)
-        this.paymentChannel(true);
+        this.paymentChannel(true)
         return
       }
       this.$message.error(res.msg)

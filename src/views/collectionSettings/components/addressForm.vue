@@ -8,22 +8,21 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item class="input-box label-border" label="收款地址">
-        <el-input v-model="addressInfo.account" placeholder="请输入钱包地址"></el-input>
+        <el-input v-model="addressInfo.account" placeholder="请输入钱包地址" />
       </el-form-item>
       <el-form-item class="input-box label-border" label="渠道类型">
         <el-select v-model="addressInfo.channel" placeholder="渠道类型">
-          <el-option v-for="(item,index) in channelTypeOp" :key="item.key" :label="item.label" :value="item.value" @change="changeSelect">
-          </el-option>
+          <el-option v-for="(item,index) in channelTypeOp" :key="item.key" :label="item.label" :value="item.value" @change="changeSelect" />
         </el-select>
       </el-form-item>
       <el-form-item class="input-box label-border" label="汇率">
-        <el-input v-model="addressInfo.rate" placeholder="请输入汇率"></el-input>
+        <el-input v-model="addressInfo.rate" placeholder="请输入汇率" />
       </el-form-item>
       <el-form-item class="input-box label-border" label="最小收款金额">
-        <el-input v-model="addressInfo.min_money" placeholder="请输入最小收款金额"></el-input>
+        <el-input v-model="addressInfo.min_money" placeholder="请输入最小收款金额" />
       </el-form-item>
       <el-form-item class="input-box label-border" label="最大收款金额">
-        <el-input v-model="addressInfo.max_money" placeholder="请输入最大收款金额"></el-input>
+        <el-input v-model="addressInfo.max_money" placeholder="请输入最大收款金额" />
       </el-form-item>
       <!-- <el-form-item class="input-box label-border" label="渠道用途">
         <el-select v-model="addressInfo.use_type" placeholder="渠道用途">
@@ -32,10 +31,10 @@
         </el-select>
       </el-form-item> -->
       <el-form-item class="input-box label-border" label="地址排序">
-        <el-input v-model="addressInfo.sort" placeholder="请输入排序序号, 序号越大越靠前"></el-input>
+        <el-input v-model="addressInfo.sort" placeholder="请输入排序序号, 序号越大越靠前" />
       </el-form-item>
       <el-form-item class="input-box label-border" label="备注">
-        <el-input v-model="addressInfo.remark" placeholder="请输入备注"></el-input>
+        <el-input v-model="addressInfo.remark" placeholder="请输入备注" />
       </el-form-item>
       <el-button type="primary" class="save-btn" @click="saveHandle">保存信息</el-button>
     </el-form>
@@ -45,16 +44,16 @@
 <script>
 // import clooectionMixins from '../clooectionMixins'
 export default {
-  name: "addressForm",
+  name: 'AddressForm',
   props: {
     closeDialog: {
       type: Function,
-      default: () => { },
+      default: () => { }
     },
     getDialogData: {
       type: Function,
-      default: () => { },
-    },
+      default: () => { }
+    }
   },
   data() {
     return {
@@ -65,42 +64,42 @@ export default {
         // use_type: '',
         sort: '',
         remark: '',
-        rate:'',
-        min_money:'',
-        max_money:''
+        rate: '',
+        min_money: '',
+        max_money: ''
       },
       channelTypeOp: [
         {
-          key:1,
+          key: 1,
           value: 'paypal',
-          label: "PayPal",
+          label: 'PayPal'
         },
         {
-          key:2,
-          value: "visa",
-          label: "visa",
+          key: 2,
+          value: 'visa',
+          label: 'visa'
         }
       ],
       channelUsageOp: [
 
         {
           value: 1,
-          label: "收款",
+          label: '收款'
         },
         {
           value: 2,
-          label: "提现",
-        },
-      ],
-    };
+          label: '提现'
+        }
+      ]
+    }
   },
   methods: {
-    changeSelect(e){
+    changeSelect(e) {
       console.log(e)
     },
     openDialog(data) {
       if (data) {
-        this.addressInfo = data;
+        this.addressInfo = data
       } else {
         this.addressInfo = {
           status: 1,
@@ -109,30 +108,30 @@ export default {
           // use_type: '',
           sort: '',
           remark: '',
-          rate:'',
-        min_money:'',
-        max_money:''
+          rate: '',
+          min_money: '',
+          max_money: ''
         }
       }
     },
     async saveHandle() {
-      let { bool, msg } = this.validateData([this.addressInfo.status, 
-      this.addressInfo.url, 
-      this.addressInfo.channel,
-       this.addressInfo.rate,
-        this.addressInfo.min_money, 
+      const { bool, msg } = this.validateData([this.addressInfo.status,
+        this.addressInfo.url,
+        this.addressInfo.channel,
+        this.addressInfo.rate,
+        this.addressInfo.min_money,
         this.addressInfo.max_money],
-        ['状态', '收款地址', '渠道类型','汇率','最小值','最大值'])
+      ['状态', '收款地址', '渠道类型', '汇率', '最小值', '最大值'])
 
       if (!bool) {
         this.$message.error(msg)
         return
       }
-      this.closeDialog();
-      this.getDialogData(this.addressInfo);
-    },
-  },
-};
+      this.closeDialog()
+      this.getDialogData(this.addressInfo)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

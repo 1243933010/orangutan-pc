@@ -15,8 +15,15 @@
       </template>
     </div>
 
-    <el-form ref="basicData" label-position="left" :rules="rules" class="basic-data-form" :class="stepType"
-      :model="authenticationData" label-width="94px">
+    <el-form
+      ref="basicData"
+      label-position="left"
+      :rules="rules"
+      class="basic-data-form"
+      :class="stepType"
+      :model="authenticationData"
+      label-width="94px"
+    >
       <!-- 左边的 -->
       <div class="in-review">
         <div class="pic">
@@ -35,8 +42,14 @@
           <el-input v-model="authenticationData.card_no" :disabled="stepType !== 'apply'" />
         </el-form-item>
         <el-form-item label="证件照:" prop="" class="id-card-img">
-          <el-upload class="upload-com" action="" :fileList="[]" :http-request="(files) => httpRequest(files,'card_img_front')"
-            :before-upload="beforeAvatarUpload" :limit="1">
+          <el-upload
+            class="upload-com"
+            action=""
+            :file-list="[]"
+            :http-request="(files) => httpRequest(files,'card_img_front')"
+            :before-upload="beforeAvatarUpload"
+            :limit="1"
+          >
             <!-- <el-button class="no-bg-btn">更新头像</el-button> -->
             <img class="img" :src="authenticationData.card_img_front?authenticationData.card_img_front:require('../../assets/personalData/cardFront.png')" alt="">
           </el-upload>
@@ -53,8 +66,14 @@
             </div>
             <p>身份证正面</p>
           </el-upload> -->
-          <el-upload class="upload-com" action="" :fileList="[]" :http-request="(files) => httpRequest(files,'card_img_back')"
-            :before-upload="beforeAvatarUpload" :limit="1">
+          <el-upload
+            class="upload-com"
+            action=""
+            :file-list="[]"
+            :http-request="(files) => httpRequest(files,'card_img_back')"
+            :before-upload="beforeAvatarUpload"
+            :limit="1"
+          >
             <!-- <el-button class="no-bg-btn">更新头像</el-button> -->
             <img class="img" :src="authenticationData.card_img_back?authenticationData.card_img_back:require('../../assets/personalData/cardFront.png')" alt="">
           </el-upload>
@@ -65,14 +84,21 @@
 
     <!-- 编辑收款地址 -->
     <DirectiveDialog ref="directiveDialogRef" :title="dialogTit">
-      <AddressForm ref="addressFormRef" :close-dialog="closeDialog" :get-dialog-data="getDialogData"
-        :address-info="checkedAddress" />
+      <AddressForm
+        ref="addressFormRef"
+        :close-dialog="closeDialog"
+        :get-dialog-data="getDialogData"
+        :address-info="checkedAddress"
+      />
     </DirectiveDialog>
 
     <!-- 编辑资料 -->
     <DirectiveDialog ref="materialsDialogRef" title="编辑资料">
-      <MaterialsForm :close-dialog="closeMaterialsDialog" :get-dialog-data="getMaterialsDialogData"
-        :form-info="basicData" />
+      <MaterialsForm
+        :close-dialog="closeMaterialsDialog"
+        :get-dialog-data="getMaterialsDialogData"
+        :form-info="basicData"
+      />
     </DirectiveDialog>
   </div>
 </template>
@@ -160,7 +186,7 @@ export default {
         }
       ],
       stepType: 'apply', // apply: 申请认证,  review: 审核中, result: 结果
-      statusObj:{}
+      statusObj: {}
     }
   },
   computed: {
@@ -179,13 +205,13 @@ export default {
 
     // },
     async getDealersVerifyStatus() {
-      let res = await dealers_verify_status();
-      if(res.code==200){
-        this.statusObj = res.data;
-        if(res.data.auth_status==1){
-          this.stepType = review;
-        }else if(res.data.auth_status>1){
-          this.stepType = result;
+      const res = await dealers_verify_status()
+      if (res.code == 200) {
+        this.statusObj = res.data
+        if (res.data.auth_status == 1) {
+          this.stepType = review
+        } else if (res.data.auth_status > 1) {
+          this.stepType = result
         }
       }
     },
@@ -226,8 +252,8 @@ export default {
         this.paymentChannelObj.total = res.data.total
       }
     },
-    async httpRequest( files,type) {
-      console.log(type,files, process.env.VUE_APP_FILE_URL)
+    async httpRequest(files, type) {
+      console.log(type, files, process.env.VUE_APP_FILE_URL)
       const formData = new FormData()
       formData.append('file', files.file) // 文件名
       const res = await uploadImg(formData)
@@ -317,7 +343,7 @@ export default {
     getMaterialsDialogData(data) {
       console.log(data)
       // 保存后的数据 data
-    },
+    }
     // openMaterialsDialog() {
     //   this.$refs.materialsDialogRef.openDialog()
     // }
