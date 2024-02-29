@@ -42,9 +42,7 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="通道地址" name="second">
-        <el-button type="primary" class="add-address-btn" @click="openDialog('添加收款地址')"><i
-          class="el-icon-plus"
-        />添加收款地址</el-button>
+        <el-button type="primary" class="add-address-btn" @click="openDialog('添加收款地址')"><i class="el-icon-plus" />添加收款地址</el-button>
         <div class="tab-pane-container" style="border-radius: 10px; text-align: center">
           <el-table height="100%" :data="receivingAddressList" style="width: 100%">
             <el-table-column prop="channel" label="渠道类型">
@@ -118,14 +116,14 @@ import DirectiveDialog from '@/components/DirectiveDialog/index'
 export default {
   components: { AddressForm, DirectiveDialog },
   props: {
-    closeDialog: {
-      type: Function,
-      default: () => { }
-    },
-    getDialogData: {
-      type: Function,
-      default: () => { }
-    }
+    // closeDialog: {
+    //   type: Function,
+    //   default: () => { }
+    // },
+    // getDialogData: {
+    //   type: Function,
+    //   default: () => { }
+    // }
     // addressInfo: {
     //   type: Object,
     //   default: () => {
@@ -203,9 +201,9 @@ export default {
       this.dialogTit = dialogTit
       this.checkedAddress = data
       this.$refs.directiveDialogRef1.openDialog(data)
-      // this.$nextTick(() => {
-      //   this.$refs.addressFormRef?.openDialog(data);
-      // })
+      this.$nextTick(() => {
+        this.$refs.addressFormRef?.openDialog(data);
+      })
     },
     changeInput(e) {
       console.log(e)
@@ -258,6 +256,10 @@ export default {
       }
       this.$message.error(res.msg)
       // 保存后的数据 data
+    },
+    closeDialog(){
+      console.log('1111')
+      this.$refs.directiveDialogRef1.close()
     },
     saveHandle() {
       this.closeDialog()

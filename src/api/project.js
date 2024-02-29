@@ -447,3 +447,42 @@ export function update_info(data) {
     data
   })
 }
+
+
+// 我的钱包地址
+export function member_wallet_list(params) {
+  return request({
+    url: `/api/member_wallet/list`,
+    method: 'get',
+    params
+  })
+}
+
+
+
+// 新增提现地址
+export function member_wallet_add(data) {
+  return request({
+    url: `/api/member_wallet/add`,
+    method: 'post',
+    data
+  })
+}
+
+// 修改钱包地址
+export function member_wallet_edit(data) {
+  return request({
+    url: `/api/member_wallet/update`,
+    method: 'post',
+    data
+  })
+}
+
+// 删除钱包地址
+export function member_wallet_del(data) {
+  return request({
+    url: `/api/member_wallet/del`,
+    method: 'post',
+    data
+  })
+}

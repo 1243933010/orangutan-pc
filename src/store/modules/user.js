@@ -178,21 +178,7 @@ const actions = {
            
 
           ]
-        },
-        {
-          path: '/merchantSettings',
-          component: Layout,
-          children: [
-            {
-              path: 'merchantSettings',
-              component: () => import('@/views/merchantSettings/index'),
-              name: '商家设置',
-              meta: { title: '商家设置', icon: 'el-icon-postcard', affix: true }
-            }
-           
-
-          ]
-        },
+        }
         
       ]
 
@@ -208,14 +194,28 @@ const actions = {
             }
 
           ]
+        },
+        {
+          path: '/merchantSettings',
+          component: Layout,
+          children: [
+            {
+              path: 'merchantSettings',
+              component: () => import('@/views/merchantSettings/index'),
+              name: '商家设置',
+              meta: { title: '商家设置', icon: 'el-icon-postcard', affix: true }
+            }
+           
+
+          ]
         },]
-        // if (data.identity == 1) {
-        //   routeData.push(...identity1)
-        // }
-        // if (data.identity == 2) {
-        //   routeData.push(...identity2)
-        // }
-        routeData.push(...identity1,...identity2)
+        if (data.identity == 1) {
+          routeData.push(...identity1)
+        }
+        if (data.identity == 2) {
+          routeData.push(...identity2)
+        }
+        // routeData.push(...identity1,...identity2)
         const accessRoutes = await dispatch('permission/generateRoutes', routeData, { root: true })
         router.addRoutes(routeData)
         commit('SET_USERINFO', data)

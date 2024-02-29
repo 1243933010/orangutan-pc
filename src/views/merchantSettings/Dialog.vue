@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="submit-btn">
-                    <div class="btn1 flex-content" @click="$emit('getMessage')">确定</div>
+                    <div class="btn1 flex-content" @click="handleSubmit">确定</div>
                     <div class="btn2 flex-content" @click="$refs.dialog.close()">关闭</div>
                 </div>
             </div>
@@ -63,6 +63,11 @@ export default {
         }
     },
     methods: {
+        async handleSubmit(){
+            // let info = { headImg: '修改个人信息', rate: '修改汇率', time: '修改支付时长' };
+            // this.title = info[type];
+            // $emit('getMessage')
+        },
         async httpRequest(files) {
             const formData = new FormData();
             formData.append("file", files.file);  //文件名

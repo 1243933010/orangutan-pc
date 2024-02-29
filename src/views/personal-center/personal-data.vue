@@ -2,8 +2,8 @@
   <div class="personal-data-container">
 
     <div class="step-list">
-      <template v-for="(step, index) of stepList">
-        <div :key="step.num" class="step-item" :class="{ active: step.isActive }">
+      <template v-for="(step, index) of stepList" >
+        <div class="step-item" :class="{ active: step.isActive }">
           <div class="round">
             <span class="num">{{ step.num }}</span>
             <i class="el-icon-check icon" />
@@ -24,22 +24,39 @@
       :model="authenticationData"
       label-width="94px"
     >
+    <!-- :model="authenticationData" -->
       <!-- 左边的 -->
-      <div class="in-review">
+      <div class="in-review" v-if="statusObj.auth_status==1">
         <div class="pic">
           <img src="../../assets/funnel.png">
         </div>
         <p>认证信息正在审核中，请耐心等待！</p>
       </div>
+      <div class="in-review" v-if="statusObj.auth_status==2">
+        <div class="pic">
+          <img src="../../assets/success_icon.png">
+        </div>
+        <p style="color: #466CF2;">恭喜您，商家信息已认证通过！ </p>
+      </div>
+      <div class="in-review" v-if="statusObj.auth_status==3">
+        <div class="pic">
+          <img src="../../assets/fail_icon.png">
+        </div>
+        <div>
+          <p style="color: #FF4B14;">提示：认证信息审核不通过！</p>
+          <p style="color: #FF4B14;">原因：这个是审核不通过原因！</p>
+        </div>
+      </div>
       <div class="left-form">
+       
         <el-form-item label="商家名称:" class="input-box" prop="dealers_name">
-          <el-input v-model="authenticationData.dealers_name" :disabled="stepType !== 'apply'" />
+          <el-input v-model="authenticationData.dealers_name" :disabled="![0,3].includes(statusObj.auth_status)" />
         </el-form-item>
         <el-form-item label="姓名:" class="input-box" prop="name">
-          <el-input v-model="authenticationData.name" :disabled="stepType !== 'apply'" />
+          <el-input v-model="authenticationData.name" :disabled="![0,3].includes(statusObj.auth_status)" />
         </el-form-item>
         <el-form-item label="身份证号:" class="input-box" prop="card_no">
-          <el-input v-model="authenticationData.card_no" :disabled="stepType !== 'apply'" />
+          <el-input v-model="authenticationData.card_no" :disabled="![0,3].includes(statusObj.auth_status)" />
         </el-form-item>
         <el-form-item label="证件照:" prop="" class="id-card-img">
           <el-upload
@@ -49,6 +66,7 @@
             :http-request="(files) => httpRequest(files,'card_img_front')"
             :before-upload="beforeAvatarUpload"
             :limit="1"
+            :disabled="![0,3].includes(statusObj.auth_status)"
           >
             <!-- <el-button class="no-bg-btn">更新头像</el-button> -->
             <img class="img" :src="authenticationData.card_img_front?authenticationData.card_img_front:require('../../assets/personalData/cardFront.png')" alt="">
@@ -73,12 +91,19 @@
             :http-request="(files) => httpRequest(files,'card_img_back')"
             :before-upload="beforeAvatarUpload"
             :limit="1"
+            :disabled="![0,3].includes(statusObj.auth_status)"
           >
             <!-- <el-button class="no-bg-btn">更新头像</el-button> -->
             <img class="img" :src="authenticationData.card_img_back?authenticationData.card_img_back:require('../../assets/personalData/cardFront.png')" alt="">
           </el-upload>
         </el-form-item>
-        <el-button type="primary" @click="authenticationFnc">申请认证</el-button>
+        <el-button type="primary"  v-if="statusObj.auth_status==0" @click="authenticationFnc">
+            <span>申请认证</span>
+            <span v-if="[2,3].includes(statusObj.auth_status)">重新申请认证</span>
+        </el-button>
+        <el-button type="primary" style="background: #ECA52A;border: none;"  v-if="[2,3].includes(statusObj.auth_status)"   @click="authenticationFnc">
+            <span>重新申请认证</span>
+        </el-button>
       </div>
     </el-form>
 
@@ -110,7 +135,7 @@ import DirectiveDialog from '@/components/DirectiveDialog/index'
 import MaterialsForm from '@/views/personal-center/components/materialsForm'
 import {
   user_info, authentication, uploadImg, payment_channel,
-  payment_channel_submit, payment_channel_edit, user_info_edit, dealers_verify_status, dealers_verify
+  payment_channel_submit, payment_channel_edit, user_info_edit, dealers_verify_status, dealers_verify,dealers_info
 } from '@/api/project'
 import { convertTimestampToDateString } from '@/utils/time'
 export default {
@@ -123,7 +148,7 @@ export default {
   },
   data() {
     return {
-      activeName: 'first',
+      // activeName: 'first',
       // userBool: {
       //   headIcon: false,
       //   userName: false,
@@ -185,7 +210,7 @@ export default {
           isActive: false
         }
       ],
-      stepType: 'apply', // apply: 申请认证,  review: 审核中, result: 结果
+      stepType: 'result', // apply: 申请认证,  review: 审核中, result: 结果
       statusObj: {}
     }
   },
@@ -198,6 +223,8 @@ export default {
     // this.receivingAddressList.sort((a, b) => a.sort - b.sort);
     // console.log(this.receivingAddressList);
     // this.getUserInfo()
+
+
     this.getDealersVerifyStatus()
   },
   methods: {
@@ -208,11 +235,39 @@ export default {
       const res = await dealers_verify_status()
       if (res.code == 200) {
         this.statusObj = res.data
-        if (res.data.auth_status == 1) {
-          this.stepType = review
+        if(res.data.auth_status == 0){
+          this.stepType = 'apply';
+          this.handleStepStatus(0)
+        }else if (res.data.auth_status == 1) {
+          this.stepType = 'review';
+          this.handleStepStatus(1)
         } else if (res.data.auth_status > 1) {
-          this.stepType = result
+          this.stepType = 'result'
+          this.handleStepStatus(2)
         }
+
+       
+        if(res.data.auth_status==2){
+          this.authenticationData = {...res.data,...res.data.card_img};
+          this.authenticationData.card_img_front=res.data.card_img.front;
+          this.authenticationData.card_img_back=res.data.card_img.back;
+        }
+      }
+    },
+    handleStepStatus(index){
+      this.stepList.forEach((val,ind)=>{
+        if(ind==index){
+          val.isActive = true;
+        }else{
+          val.isActive = false;
+        }
+      })
+    },
+    async getDealersInfo(){
+      let res = await dealers_info();
+      if(res.code==200){
+        this.authenticationData = res.data;
+        console.log(this.authenticationData,'---',res.data)
       }
     },
     // async setUser(type) {
