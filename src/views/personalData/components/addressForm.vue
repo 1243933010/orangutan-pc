@@ -6,8 +6,8 @@
         <el-input v-model="addressInfo.address" placeholder="请输入提现地址"></el-input>
       </el-form-item>
 
-      <el-form-item class="input-box label-border" label="chain">
-        <el-input v-model="addressInfo.chain" placeholder="请输入chain"></el-input>
+      <el-form-item class="input-box label-border" label="网络">
+        <el-input :disabled="true" v-model="addressInfo.chain" placeholder="请输入chain"></el-input>
       </el-form-item>
       <el-form-item class="input-box label-border" label="备注">
         <el-input v-model="addressInfo.remark" placeholder="请输入备注"></el-input>
@@ -35,7 +35,7 @@ export default {
     return {
       addressInfo: {
         address: "",
-        chain: '',
+        chain: 'trc20',
         remark: ''
       },
       channelTypeOp: [
@@ -73,14 +73,14 @@ export default {
       } else {
         this.addressInfo = {
           address: "",
-          chain: '',
+          chain: 'trc20',
           remark: ''
         }
       }
     },
     async saveHandle() {
-      let { bool, msg } = this.validateData([this.addressInfo.address, this.addressInfo.chain],
-        [ '地址', 'chain'])
+      let { bool, msg } = this.validateData([this.addressInfo.address],
+        [ '地址'])
 
       if (!bool) {
         this.$message.error(msg)

@@ -182,19 +182,20 @@ const actions = {
         
       ]
 
-        let identity2 = [{
-          path: '/collectionSettings',
-          component: Layout,
-          children: [
-            {
-              path: 'collectionSettings',
-              component: () => import('@/views/collectionSettings/index'),
-              name: '收款设置',
-              meta: { title: '收款设置', icon: 'el-icon-postcard', affix: true }
-            }
+        let identity2 = [
+        //   {
+        //   path: '/collectionSettings',
+        //   component: Layout,
+        //   children: [
+        //     {
+        //       path: 'collectionSettings',
+        //       component: () => import('@/views/collectionSettings/index'),
+        //       name: '收款设置',
+        //       meta: { title: '收款设置', icon: 'el-icon-postcard', affix: true }
+        //     }
 
-          ]
-        },
+        //   ]
+        // },
         {
           path: '/merchantSettings',
           component: Layout,

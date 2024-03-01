@@ -65,8 +65,10 @@
         </div>
 
         <div>
-            <el-button type="primary" class="add-address-btn" @click="openDialog1('添加收款地址')"><i
-                    class="el-icon-plus" />添加收款地址</el-button>
+            <div class="add-btn">
+                <el-button type="primary" class="add-address-btn" @click="openDialog1('添加收款地址')">
+                    <i class="el-icon-plus" />添加</el-button>
+            </div>
             <div class="tab-pane-container" style="border-radius: 10px; text-align: center">
                 <el-table height="100%" :data="receivingAddressList" style="width: 100%">
                     <el-table-column prop="channel" label="渠道类型">
@@ -74,12 +76,14 @@
                 <span>{{ scope.row.channel }}</span>
               </template> -->
                     </el-table-column>
-                    <el-table-column prop="use_type" label="渠道用途">
+                    <!-- <el-table-column prop="use_type" label="渠道用途">
                         <template slot-scope="scope">
                             <span v-if="scope.row.use_type == 1">收款</span>
                             <span v-if="scope.row.use_type == 2">提现</span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
+                    <el-table-column prop="account_name" label="账号名称" />
+
                     <el-table-column prop="status" label="状态">
                         <template slot-scope="scope">
                             <!-- <el-tag :type="scope.row.stateTag" disable-transitions>{{
@@ -100,16 +104,17 @@
                     <el-table-column prop="remark" label="备注" />
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-button type="primary" plain @click="openDialog1('编辑收款地址', scope.row)">编辑</el-button>
+                            <!-- <el-button type="primary" plain @click="openDialog1('编辑收款地址', scope.row)">编辑</el-button> -->
+                            <span style="color: #466CF2;" @click="openDialog1('编辑收款地址', scope.row)">编辑</span>
                         </template>
                     </el-table-column>
                 </el-table>
-                <div class="pagination">
+                <!-- <div class="pagination">
                     <el-pagination :current-page="paymentChannelObj.page" :page-sizes="[10, 20, 30, 40]"
                         :page-size="paymentChannelObj.limit" layout="total, sizes, prev, pager, next, jumper"
                         :total="paymentChannelObj.total" @size-change="handleSizeChange"
                         @current-change="handleCurrentChange" />
-                </div>
+                </div> -->
             </div>
         </div>
         <Dialog ref="dialog" @getMessage="getMessage" />
@@ -221,6 +226,20 @@ export default {
 
 
 <style lang="scss" scoped>
+.add-btn{
+    width: 100%;
+    margin: 35px 0 19px 0;
+    padding-right: 30px;
+    display: flex;
+    flex-direction: row;
+    flex-direction: row-reverse;
+
+    ::v-deep .el-button{
+        background: #466CF2;
+        border-radius: 10px;
+    }
+    
+}
 .setting {
     width: 100%;
     background-color: white;

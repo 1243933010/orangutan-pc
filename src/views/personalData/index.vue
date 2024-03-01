@@ -52,7 +52,7 @@
 
             <el-table-column prop="member_wallet_id" label="id" />
             <el-table-column prop="address" label="地址" />
-            <el-table-column prop="chain" label="chain" />
+            <el-table-column prop="chain" label="网络" />
             <el-table-column prop="remark" label="备注" />
             <el-table-column label="操作">
               <template slot-scope="scope">
