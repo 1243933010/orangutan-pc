@@ -3,8 +3,8 @@
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
     <div :class="{'fixed-header':fixedHeader}">
-      <navbar :right-nav-list="rightNavList" style="background-color: #fff;" />
-      <!-- <tags-view v-if="needTagsView" /> -->
+      <navbar  :leftNavList="leftNavList"  style="background-color: #fff;" />
+      <!-- <tags-view v-if="needTagsView" />  :right-nav-list="rightNavList"-->
     </div>
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <app-main />
@@ -34,6 +34,24 @@ export default {
   mixins: [ResizeMixin],
   data() {
     return {
+      leftNavList: [
+        {
+          text: "首页",
+          path: "/"
+        },
+        {
+          text: "收款",
+          path: "/collection"
+        },
+        {
+          text: "充值",
+          path: "/rechargeOrder/rechargeOrder"
+        },
+        {
+          text: "订单",
+          path: "/withdrawal/withdrawal"
+        }
+      ],
       rightNavList: [
         {
           text: '充值',

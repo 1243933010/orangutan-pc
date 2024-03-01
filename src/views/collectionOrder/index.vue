@@ -42,8 +42,8 @@
             <el-table-column prop="order_no" label="订单号"> </el-table-column>
             <el-table-column prop="channel" label="收款渠道"> </el-table-column>
             <el-table-column prop="order_status_name" label="状态"> </el-table-column>
-            <el-table-column prop="payment_account" label="收款账号"> </el-table-column>
-            <el-table-column prop="payment_url" label="收款地址"> </el-table-column>
+            <el-table-column prop="account_name" label="收款账号"> </el-table-column>
+            <el-table-column prop="account" label="收款地址"> </el-table-column>
             <el-table-column prop="rate" label="费率"> </el-table-column>
             <el-table-column prop="order_status" label="订单状态">
               <template slot-scope="scope">

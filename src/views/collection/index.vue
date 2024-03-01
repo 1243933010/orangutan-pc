@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <navbar />
+    <Navbar :leftNavList="leftNavList" />
 
     <div class="main">
       <div class="tab">
@@ -121,6 +121,7 @@
 
 <script>
 import Navbar from '@/layout/components/Navbar'
+
 // import formMixins from '@/mixins/formMixins'
 import clooectionMixins from './clooectionMixins'
 import DirectiveDialog from '@/components/DirectiveDialog/index'
@@ -169,6 +170,24 @@ export default {
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       },
+      ],
+      leftNavList: [
+        {
+          text: "首页",
+          path: "/"
+        },
+        {
+          text: "收款",
+          path: "/collection"
+        },
+        {
+          text: "充值",
+          path: "/rechargeOrder/rechargeOrder"
+        },
+        {
+          text: "订单",
+          path: "/withdrawal/withdrawal"
+        }
       ]
     }
   },
